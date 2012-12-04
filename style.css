@@ -1,0 +1,7 @@
+* { margin:0; padding:0;}
+html, body {height:100%; width:100%}
+body {background-color: #000000;}
+/*canvas {display:block;background:url(img/bg.png);background-repeat: no-repeat;  }*/
+#streetView {position:absolute; top:0; left:0; z-index: 0;}
+#canvasContainer {position: relative; z-index: 1;}
+#main {position: relative;}

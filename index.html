@@ -4,19 +4,11 @@
 		<title>Snow Day</title>
 		<meta charset="utf-8">
 		<link href="style.css" rel="stylesheet" type="text/css">
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-
-		
 	</head>
-	<body onload="canvasSnow.init(500, 1200, 734)">
-		<!--<script type="text/javascript" src="js/ThreeCanvas.js"></script>-->
-		<script type="text/javascript" src="js/dat.gui.js"></script>
-		
+	<body onload="canvasSnow.init(700, 1200, 734)">
 		<script type="text/javascript" src="js/three.js"></script>
 		<script type="text/javascript" src="js/Snow.js"></script>
 		<script>
-
-
 var canvasSnow = (function() {
 	var snowAmount = 500;
 
@@ -24,6 +16,8 @@ var canvasSnow = (function() {
 
 	var SCREEN_WIDTH = window.innerWidth;
 	var SCREEN_HEIGHT = window.innerHeight;
+	var canvasHeight = null;
+	var canvasWidth = null;
 
 	var container;
 
@@ -38,19 +32,21 @@ var canvasSnow = (function() {
 	particleImage.src = 'img/ParticleSmoke.png'; 
 
 	function init(particleAmount, canvasW, canvasH) {
+		canvasWidth = canvasW;
+		canvasHeight = canvasH;
 
 		snowAmount=particleAmount;
 
 		container = document.getElementById('canvasContainer');
 		
-		camera = new THREE.PerspectiveCamera( 75, canvasW / canvasH, 1, 10000 );
+		camera = new THREE.PerspectiveCamera( 75, canvasWidth / canvasHeight, 1, 10000 );
 		camera.position.z = 1000;
 
 		scene = new THREE.Scene();
 		scene.add(camera);
 			
 		renderer = new THREE.CanvasRenderer();
-		renderer.setSize(canvasW, canvasH);
+		renderer.setSize(canvasWidth, canvasHeight);
 		var material = new THREE.ParticleBasicMaterial( { map: new THREE.Texture(particleImage) } );
 
 		particles = []; 
@@ -74,28 +70,21 @@ var canvasSnow = (function() {
 	}
 
 	function kill() {
-		clearInterval(looper);
-		container.removeChild(document.getElementsByTagName("canvas")[0]);
+		try{
+			clearInterval(looper);
+			container.removeChild(document.getElementsByTagName("canvas")[0]);
+		}
+		catch (e) {
+
+		}
 	}
 
-	function addSnow(){
-		console.log(snowAmount + " -add");
-		if (snowAmount<=650){
-			snowAmount = snowAmount + 150;
-			kill();
-			init(snowAmount, 1200, 734);
-			renderer.render(scene, camera);
-		}				
-	}
-
-	function reduceSnow(){
-		console.log(snowAmount + " -reduce");
-		if (snowAmount>=350){
-			snowAmount = snowAmount - 150;
-			kill();
-			init(snowAmount, 1200, 734);
-			renderer.render(scene, camera);
-		}				
+	function setSnow(amount) {
+		amount = amount-1;
+		var snowAmount = [100, 300, 500];
+		kill();
+		init(snowAmount[amount], canvasWidth, canvasHeight);
+		renderer.render(scene, camera);
 	}
 
 	function loop() {
@@ -120,21 +109,20 @@ var canvasSnow = (function() {
 
 	return {
 		init: function(particleAmount, canvasW, canvasH) {
+			kill();
 			init(particleAmount, canvasW, canvasH);
+		},
+		setSnow: function(amount) {
+			setSnow(amount);
 		}
-	}
+	};
 })();
 		</script>
-
-		<!--<canvas id="myCanvas" width="500" height="500"></canvas>-->
-		<!-- Insert fallback content here -->
-		
-		<!--<button type="button" id="plus" value="add" onclick="addSnow();">+</button>
-		<button type="button" id="minus" value="subtract" onclick="reduceSnow();">-</button>-->
 		<div id="main">
 			<div id="canvasContainer"></div>
-			<input type="image" src="img/plus.png" name="plus" width="200" height="75" onclick="addSnow();">
-			<input type="image" src="img/minus.png" name="plus" width="200" height="75" onclick="reduceSnow();">
+			<input type="image" src="img/plus.png" name="plus" width="200" height="75" onclick="canvasSnow.setSnow(1)">
+			<input type="image" src="img/plus.png" name="plus" width="200" height="75" onclick="canvasSnow.setSnow(2)">
+			<input type="image" src="img/minus.png" name="plus" width="200" height="75" onclick="canvasSnow.setSnow(3)">
 			<img src="img/bg.png" id="streetView" /></img>
 		</div>
 	</body>

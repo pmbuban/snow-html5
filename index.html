@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
 		<link href="style.css" rel="stylesheet" type="text/css">
 	</head>
-	<body onload="canvasSnow.init(700, 1200, 734)">
+	<body onload="canvasSnow.init(700, 'canvasContainer')">
 		<script type="text/javascript" src="js/three.js"></script>
 		<script type="text/javascript" src="js/Snow.js"></script>
 		<script>
@@ -31,15 +31,15 @@ var canvasSnow = (function() {
 	var particleImage = new Image();//THREE.ImageUtils.loadTexture( "img/ParticleSmoke.png" );
 	particleImage.src = 'img/ParticleSmoke.png'; 
 
-	function init(particleAmount, canvasW, canvasH) {
-		canvasWidth = canvasW;
-		canvasHeight = canvasH;
+	function init(particleAmount, containerId) {
+		container = document.getElementById(containerId);
+
+		canvasWidth = container.offsetWidth;
+		canvasHeight = container.offsetHeight;
 
 		snowAmount=particleAmount;
-
-		container = document.getElementById('canvasContainer');
 		
-		camera = new THREE.PerspectiveCamera( 75, 1.333, 1, 10000 );
+		camera = new THREE.PerspectiveCamera( 75, canvasWidth / canvasHeight, 1, 10000 );
 		camera.position.z = 1000;
 
 		scene = new THREE.Scene();
@@ -80,11 +80,11 @@ var canvasSnow = (function() {
 
 
 
-	function setSnow(amount) {
+	function setSnow(amount, containerId) {
 		amount = amount-1;
 		var snowAmount = [100, 300, 500];
 		kill();
-		init(snowAmount[amount], canvasWidth, canvasHeight);
+		init(snowAmount[amount], containerId);
 		renderer.render(scene, camera);
 	}
 
@@ -109,21 +109,21 @@ var canvasSnow = (function() {
 	}
 
 	return {
-		init: function(particleAmount, canvasW, canvasH) {
+		init: function(particleAmount, containerId) {
 			kill();
-			init(particleAmount, canvasW, canvasH);
+			init(particleAmount, containerId);
 		},
-		setSnow: function(amount) {
-			setSnow(amount);
+		setSnow: function(amount, containerId) {
+			setSnow(amount, containerId);
 		}
 	};
 })();
 		</script>
 		<div id="main">
 			<div id="canvasContainer"></div>
-			<input type="image" src="img/plus.png" name="plus" width="200" height="75" onclick="canvasSnow.setSnow(1)">
-			<input type="image" src="img/plus.png" name="plus" width="200" height="75" onclick="canvasSnow.setSnow(2)">
-			<input type="image" src="img/minus.png" name="plus" width="200" height="75" onclick="canvasSnow.setSnow(3)">
+			<input type="image" src="img/plus.png" name="plus" width="200" height="75" onclick="canvasSnow.setSnow(1,'canvasContainer')">
+			<input type="image" src="img/plus.png" name="plus" width="200" height="75" onclick="canvasSnow.setSnow(2,'canvasContainer')">
+			<input type="image" src="img/minus.png" name="plus" width="200" height="75" onclick="canvasSnow.setSnow(3,'canvasContainer')">
 			<img src="img/bg.png" id="streetView" /></img>
 		</div>
 	</body>

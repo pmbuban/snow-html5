@@ -39,7 +39,7 @@ var canvasSnow = (function() {
 
 		container = document.getElementById('canvasContainer');
 		
-		camera = new THREE.PerspectiveCamera( 75, canvasWidth / canvasHeight, 1, 10000 );
+		camera = new THREE.PerspectiveCamera( 75, 1.333, 1, 10000 );
 		camera.position.z = 1000;
 
 		scene = new THREE.Scene();
@@ -64,8 +64,7 @@ var canvasSnow = (function() {
 
 		container.appendChild( renderer.domElement );
 
-
-		looper = setInterval( loop, 1000 / 60 );
+	    looper = setInterval( loop, 1000 / 60 );
 		
 	}
 
@@ -78,6 +77,8 @@ var canvasSnow = (function() {
 
 		}
 	}
+
+
 
 	function setSnow(amount) {
 		amount = amount-1;
